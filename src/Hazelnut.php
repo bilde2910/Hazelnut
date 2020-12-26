@@ -366,7 +366,7 @@ class Authenticator {
         $data = array();
         foreach ($fields as $field) {
             $separator = strpos($field, '=');
-            if ($field === false) continue;
+            if ($separator === false) continue;
             $data[substr($field, 0, $separator)] = substr($field, $separator + 1);
         }
         return $data;
