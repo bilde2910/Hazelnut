@@ -39,6 +39,24 @@ class CoreValidateNutTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(\Varden\Hazelnut\NUT_VALID, $result);
     }
 
+    public function testValidNutWithPaddedDefinedKey() {
+        /*
+         * Per https://www.grc.com/sqrl/details.htm: After its single trailing (“=”) equals sign
+         * is removed, the resulting 43-character string becomes the value for the sqrlkey parameter.
+         *
+         * Test for cases where the CHAR(44) pubkey includes a trailing space.
+         */
+        $nut = new \Varden\Hazelnut\Nut('sample');
+        $key = "k";
+        $nut
+            -> createdAt(time())
+            -> forIdentity("k ")
+            -> withTIF('0')
+            -> byIP('2001:db8::1');
+        $result = $this->method->invoke($this->hazelnut, $nut, $key);
+        $this->assertEquals(\Varden\Hazelnut\NUT_VALID, $result);
+    }
+
     public function testNullNut() {
         $result = $this->method->invoke($this->hazelnut, null, null);
         $this->assertEquals(\Varden\Hazelnut\NUT_INVALID, $result);
