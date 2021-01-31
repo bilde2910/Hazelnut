@@ -265,7 +265,9 @@ class Authenticator {
     private function validateNut(?Nut $nut, ?string $key) :int {
         if ($nut == null) return NUT_INVALID;
         if ($nut->getCreatedTime() < strtotime('-'.$this->nutExpiry.' minutes')) return NUT_EXPIRED;
-        if ($key != null && $nut->getIdentity() != null && $key != $nut->getIdentity()) return NUT_MISMATCHING_ID;
+        if ($key != null && $nut->getIdentity() != null && $key != trim($nut->getIdentity())) {
+            return NUT_MISMATCHING_ID;
+        }
         return NUT_VALID;
     }
 
